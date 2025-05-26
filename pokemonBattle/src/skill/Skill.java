@@ -1,53 +1,54 @@
 package skill;
+import pokemon.Pokemon;
 
 import gameplay.*;
 import pokemon.Pokemon;
 import java.util.Random;
 
-public abstract class Skill {
-	public String name;
-	public Type type;
+public class Skill {
 	public double power;
 	public int accuracy;
-
-	public double dmg;
+	public String name;
+	public Type type;
 	
-	public Skill(String name, Type type, double power, int accuracy) {
-		   this.name = name;
-	       this.type = type;
-	       this.power = power;
-	       this.accuracy = accuracy;
-
+	public Skill(String name, double power, int accuracy, Type type)
+	{
+		this.name = name;
+		this.power = power;
+		this.accuracy = accuracy;
+		this.type = type;
 	}
 	
-	public abstract void skillEffect(Pokemon my, Pokemon opp);
-	
-	private static final Random random = new Random();
-	
-	public boolean checkHit() {
-		  int roll = random.nextInt(100) + 1; // 1 ~ 100
-	        return roll <= accuracy;
-	}
-	
-	public double checkSameType(Pokemon my, Skill skill) {
-		if(my.type == skill.type) {
-			return 1.2;
+	public boolean checkType(Pokemon myPoki)
+	{
+		if(myPoki.type == this.type)
+		{
+			return true;
 		}
-		return 1.0;
+		return false;
 	}
-
-    public double checkEffective(Pokemon opp) {
-        return this.type.effective(opp.type);
-    }
-    
-    public double checkDouble() {
-    	 int roll = random.nextInt(100) + 1; 
-	     if(roll <= 5) return 2.0;
-		return 1.0;
-	     
-    }
-    
-    
-    
+	
+	public void useSkill(Skill skillName, Pokemon target, Pokemon myPoki)
+	{
+		double damage;
+		damage = skillName.power;
+		damage += myPoki.atk - target.def;
+		if(myPoki.checkStrongType(myPoki, target))
+		{
+			damage *= 2;
+		}
+		if(myPoki.checkWeakType(myPoki, target))
+		{
+			damage *= 0.5;
+		}
+		if(skillName.checkType(myPoki))
+		{
+			damage *= 1.2;
+		}
+		damage *= myPoki.vital();
+		target.hp -= damage;
+		target.isDefense = false;
+	}
+	
 }
 
