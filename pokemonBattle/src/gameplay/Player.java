@@ -1,5 +1,10 @@
 package gameplay;
 
-public class Player {
+import pokemon.*;
 
+public class Player {
+	public String name;
+	public Starting myPkm;
+	
+	
 }

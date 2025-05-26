@@ -1,22 +1,43 @@
 package pokemon;
 
-import skill.Skill;
-
+import skill.*;
+import gameplay.*;
 
 public class Pokemon {
 	
 	public String name;
 	
-	public int hp, atk, def, spAtk, spDef, spd;
+	public double hp, atk, def, spd;
 	public int lv;
-	public int type; // 1 = 노말, 2 = 풀, 3 = 불, 4 = 물
+	public Type type;
 	public Skill[] skill = new Skill[4];
 	
-	public void useSkill(Skill skill, Pokemon target) {
-	    System.out.println(name + "이(가) " + skill.name + "을(를) 사용했습니다!");
-	    target.hp -= skill.dmg;
-	    System.out.println(target.name + "의 남은 HP: " + target.hp);
+	public Pokemon(String name, double hp, double atk, double def, double spd, Type type) {
+		this.name = name;
+        this.hp = hp;
+        this.atk = atk;
+        this.def = def;
+        this.spd = spd;
+        this.type = type;
+        this.skill = new Skill[4];
 	}
 	
+	 public void setSkill(int index, Skill skill) {
+		 this.skill[index] = skill;
+	 }
+	
+	 
+	
+	public boolean checkAlive() {
+		if(hp<=0) {
+			hp=0;
+			return false;
+		}
+		return true;
+	}
+	
+	public void attack() {
+		
+	}
 	
 }
