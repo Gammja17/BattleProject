@@ -25,10 +25,10 @@ public class GameManager {
    
    
    public Starting selectStarting(int select) {
-      Starting 디폴트 = new Starting("이상해씨", 110, 20, 40, 20, Type.풀);
+      Starting 디폴트 = new Starting("이상해씨", 110, 20, 40, 20, Type.풀, 1);
       switch(select) {
       case 1 : //이상해씨
-         Starting 이상해씨 = new Starting("이상해씨", 110, 20, 40, 20, Type.풀);
+         Starting 이상해씨 = new Starting("이상해씨", 110, 20, 40, 20, Type.풀, 1);
           이상해씨.setSkill(0, 몸통박치기);
           return 이상해씨;
       case 2 : //파이리

@@ -1,6 +1,7 @@
 package pokemon;
 
-import skill.Skill;
+import skill.*;
+import gameplay.Type;
 
 
 public class Pokemon {
@@ -15,7 +16,8 @@ public class Pokemon {
 	public int Lv;
 	public boolean isDefense = false;
 	public double speed;
-	
+	public int spdCnt = 0;
+	public int atkCnt = 0;
 	public Pokemon(String name, Type type, double hp, double atk, double def, double speed, Skill[] skill, int Lv)
 	{
 		this.name = name;
@@ -30,28 +32,7 @@ public class Pokemon {
 	
 	public void attack(Skill skillName, Pokemon target, Pokemon myPoki)
 	{
-		int damage;
-		damage = skillName.skillAct();
-		damage += this.atk - target.def;
-		if(checkStrongType(myPoki, target))
-		{
-			damage *= 2;
-		}
-		if(checkWeakType(myPoki, target))
-		{
-			damage *= 0.5;
-		}
-		if(skillName.checkType(myPoki))
-		{
-			damage *= 1.2;
-		}
-		if(target.defense(target.isDefense))
-		{
-			damage *= 0.3;
-		}
-		damage *= vital();
-		target.hp -= damage;
-		
+		skillName.useSkill(skillName, target, myPoki);
 		
 	}
 	public boolean checkAlive(double hp)
@@ -62,49 +43,49 @@ public class Pokemon {
 		}
 		return false;
 	}
-	private boolean checkStrongType(Pokemon myPoki, Pokemon target)
+	public boolean checkStrongType(Pokemon myPoki, Pokemon target)
 	{
-		if(myPoki.type == "Fire" && target.type == "Grass")
+		if(myPoki.type == Type.불 && target.type == Type.풀)
 		{
 			return true;
 		}
-		else if(myPoki.type == "Water" && target.type == "Fire")
+		else if(myPoki.type == Type.물 && target.type == Type.불)
 		{
 			return true;
 		}
-		else if(myPoki.type == "Grass" && target.type == "Water")
+		else if(myPoki.type == Type.풀 && target.type == Type.물)
 		{
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean checkWeakType(Pokemon myPoki, Pokemon target)
+	public boolean checkWeakType(Pokemon myPoki, Pokemon target)
 	{
-		if(myPoki.type == "Grass" && target.type == "Fire")
+		if(myPoki.type == Type.풀 && target.type == Type.불)
 		{
 			return true;
 		}
-		else if(myPoki.type == "Fire" && target.type == "Water")
+		else if(myPoki.type == Type.불 && target.type == Type.물)
 		{
 			return true;
 		}
-		else if(myPoki.type == "Water" && target.type == "Grass")
+		else if(myPoki.type == Type.물 && target.type == Type.풀)
 		{
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean defense(Skill skill) //지금 사용 스킬이 방어하기이면 여기에 인자 보내기?
+	public boolean checkDefense(Skill skill) 
 	{
-		if(skill == /*여기에 방어 넣기*/)
+		if(skill.name == "방어")
 		{
 			return true;
 		}
 		return false;
 	}
-	private double vital()
+	public double vital()
 	{
 		int n = (int)(Math.random()*1000)%100;
 		if(n<5)
@@ -114,26 +95,6 @@ public class Pokemon {
 		return 1;
 	}
 	
-	
-	
-	
 
-	
-	
-	
-	
-//	public String name;
-//	
-//	public int hp, atk, def, spAtk, spDef, spd;
-//	public int lv;
-//	public int type; // 1 = 노말, 2 = 풀, 3 = 불, 4 = 물
-//	public Skill[] skill = new Skill[4];
-//	
-//	public void useSkill(Skill skill, Pokemon target) {
-//	    System.out.println(name + "이(가) " + skill.name + "을(를) 사용했습니다!");
-//	    target.hp -= skill.dmg;
-//	    System.out.println(target.name + "의 남은 HP: " + target.hp);
-//	}
-//	
 	
 }
