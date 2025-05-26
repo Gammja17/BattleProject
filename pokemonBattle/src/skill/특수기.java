@@ -15,10 +15,28 @@ public class 특수기 extends Skill {
 	}
 
 	@Override
-	public void skillEffect(Pokemon my, Pokemon opp) {
-		// TODO Auto-generated method stub
-		
+	public void useSkill(Skill skillName, Pokemon target, Pokemon myPoki)
+	{
+		double damage;
+		damage = skillName.power;
+		damage += myPoki.atk - target.def;
+		if(checkStrongType(myPoki, target))
+		{
+			damage *= 2;
+		}
+		if(checkWeakType(myPoki, target))
+		{
+			damage *= 0.5;
+		}
+		if(checkType(myPoki))
+		{
+			damage *= 1.2;
+		}
+		damage *= vital();
+		target.hp -= damage;
+
 	}
+	
 
 
 }

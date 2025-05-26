@@ -18,22 +18,36 @@ public class Starting extends Pokemon {
     }
     
     public void gainExp(int gainedExp) {
+    	System.out.println(name + "이(가) " + gainedExp + "의 경험치를 얻었다!");
         this.exp += gainedExp;
         updateLevel();
     }
 
-    private void updateLevel() { //레벨업 처리
+    private void updateLevel() {
         for (int i = expTable.length - 1; i >= 0; i--) {
             if (exp >= expTable[i]) {
-                lv = i + 1;  // index 0 → lv 1, index 1 → lv 2 ...
-                this.hp += lv*10;
-            	this.atk += lv*2;
-                this.def += lv*2;
-                this.spd += lv*3;
+                int newLevel = i + 1;
+                if (newLevel > lv) {
+                    int levelGap = newLevel - lv;
+                    lv = newLevel;
+
+                    this.hp += 10 * levelGap;
+                    this.atk += 2 * levelGap;
+                    this.def += 2 * levelGap;
+                    this.spd += 3 * levelGap;
+
+                    System.out.println("레벨이 " + lv + "이(가) 되었습니다!");
+                    System.out.println("HP +" + (10 * levelGap));
+                    System.out.println("ATK +" + (2 * levelGap));
+                    System.out.println("DEF +" + (2 * levelGap));
+                    System.out.println("SPD +" + (3 * levelGap));
+                	
+                }
                 break;
             }
         }
     }
+
     
     
 

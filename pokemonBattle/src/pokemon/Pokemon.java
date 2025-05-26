@@ -36,8 +36,8 @@ public class Pokemon {
 		return true;
 	}
 	
-	public void attack() {
-		
+	public void attack(Skill skillName, Pokemon target) {
+	    skillName.useSkill(skillName, target, this);
 	}
-	
+
 }

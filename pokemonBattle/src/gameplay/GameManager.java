@@ -3,20 +3,22 @@ package gameplay;
 import pokemon.*;
 import skill.*;
 
+import java.util.*;
+
 public class GameManager {
 	
 	Wild[] wildPool = new Wild[5];
 	
-	Skill 몸통박치기 = new 위력기("몸통박치기", Type.노말, 30, 95);
-	Skill 할퀴기 = new 위력기("할퀴기", Type.노말, 20, 100);
-	Skill 덩굴채찍 = new 위력기("덩굴채찍", Type.풀, 40, 100);
-	Skill 불꽃세례 = new 위력기("불꽃세례", Type.불, 40, 100);
-	Skill 물대포 = new 위력기("물대포", Type.물, 40, 100);
-	Skill 솔라빔 = new 위력기("솔라빔", Type.풀, 100, 85);
-	Skill 화염방사 = new 위력기("화염방사", Type.불, 90, 100);
-	Skill 하이드로펌프 = new 위력기("하이드로펌프", Type.물, 120, 70);
-	Skill 마구할퀴기 = new 위력기("마구할퀴기", Type.노말, 60, 100);
-	Skill 용성군 = new 위력기("용성군", Type.노말, 130, 90);
+	Skill 몸통박치기 = new Skill("몸통박치기", Type.노말, 30, 95);
+	Skill 할퀴기 = new Skill("할퀴기", Type.노말, 20, 100);
+	Skill 덩굴채찍 = new Skill("덩굴채찍", Type.풀, 40, 100);
+	Skill 불꽃세례 = new Skill("불꽃세례", Type.불, 40, 100);
+	Skill 물대포 = new Skill("물대포", Type.물, 40, 100);
+	Skill 솔라빔 = new Skill("솔라빔", Type.풀, 100, 85);
+	Skill 화염방사 = new Skill("화염방사", Type.불, 90, 100);
+	Skill 하이드로펌프 = new Skill("하이드로펌프", Type.물, 120, 70);
+	Skill 마구할퀴기 = new Skill("마구할퀴기", Type.노말, 60, 100);
+	Skill 용성군 = new Skill("용성군", Type.노말, 130, 90);
 	
 	Skill 고속이동 = new 특수기("고속이동", Type.노말, 0, 100); 
 	Skill 칼춤 = new 특수기("칼춤", Type.노말, 0, 100);       
@@ -28,7 +30,7 @@ public class GameManager {
 		Starting 디폴트 = new Starting("이상해씨", 110, 20, 40, 20, Type.풀);
 		switch(select) {
 		case 1 : //이상해씨
-			Starting 이상해씨 = new Starting("이상해씨", 110, 20, 40, 20, Type.풀);
+			Starting 이상해씨 = new Starting("이상해씨", 1110, 20, 40, 20, Type.풀);
 			 이상해씨.setSkill(0, 몸통박치기);
 			 return 이상해씨;
 		case 2 : //파이리
@@ -99,6 +101,71 @@ public class GameManager {
     return wild;
 }
 	
+	public void gameOver(Pokemon my) {
+		System.out.println(my.name+"가 기절했습니다!");
+		System.out.println("게임 오버!");
+		System.exit(0);  // 프로그램 종료
+	}
+
+	public void battle(Pokemon my, Pokemon opp) {
+	    Scanner sc = new Scanner(System.in);
+
+	    while (my.checkAlive() && opp.checkAlive()) {
+	        Pokemon first = (my.spd >= opp.spd) ? my : opp;
+	        Pokemon second = (first == my) ? opp : my;
+
+	        takeTurn(first, second, sc);
+
+	        if (!second.checkAlive()) break;
+
+	        takeTurn(second, first, sc);
+	    }
+
+	    if (!my.checkAlive()) {
+	        gameOver(my);
+	    } else {
+	        System.out.println("전투에서 승리했습니다!");
+	    }
+	    if (my instanceof Starting && opp != null) {
+            ((Starting) my).gainExp(opp.lv);  // gainExp 내부에서 자동으로 레벨업 + 기술습득 진행
+        }
+	}
+
+	public void takeTurn(Pokemon attacker, Pokemon defender, Scanner sc) {
+	    Skill selectedSkill;
+
+	    if (attacker instanceof Starting) {
+	        System.out.println(attacker.name + "의 차례! 사용할 기술을 고르세요:");
+	        for (int i = 0; i < 4; i++) {
+	            if (attacker.skill[i] != null)
+	                System.out.println((i + 1) + ". " + attacker.skill[i].name);
+	        }
+	        int choice = sc.nextInt() - 1;
+	        selectedSkill = attacker.skill[choice];
+	    } else {
+	    	List<Skill> availableSkills = new ArrayList<>();
+	    	for (Skill s : attacker.skill) {
+	    	    if (s != null) availableSkills.add(s);
+	    	}
+
+
+	    	selectedSkill = availableSkills.get(new Random().nextInt(availableSkills.size()));
+	    	System.out.println(attacker.name + "은(는) " + selectedSkill.name + "을(를) 사용했다!");
+
+	    }
+
+	    // 명중률 체크
+	    int hit = new Random().nextInt(100) + 1;
+	    if (hit > selectedSkill.accuracy) {
+	        System.out.println(attacker.name + "의 공격이 빗나갔다!");
+	        return;
+	    }
+
+	    // 공격 실행
+	    attacker.attack(selectedSkill, defender);
+	    
+	    System.out.println(defender.name + "의 남은 체력: " + Math.max(0, (int) defender.hp));
+	}
 
 
 
