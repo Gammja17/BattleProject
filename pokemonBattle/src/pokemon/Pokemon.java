@@ -14,8 +14,9 @@ public class Pokemon {
 	public boolean isAlive = true;
 	public int Lv;
 	public boolean isDefense = false;
+	public double speed;
 	
-	public Pokemon(String name, double hp, double atk, double def, Type type, Skill[] skill, int Lv)
+	public Pokemon(String name, Type type, double hp, double atk, double def, double speed, Skill[] skill, int Lv)
 	{
 		this.name = name;
 		this.atk = atk;
@@ -24,6 +25,7 @@ public class Pokemon {
 		this.type = type;
 		this.skill = skill;
 		this.Lv = Lv;
+		this.speed = speed;
 	}
 	
 	public void attack(Skill skillName, Pokemon target, Pokemon myPoki)
@@ -47,6 +49,7 @@ public class Pokemon {
 		{
 			damage *= 0.3;
 		}
+		damage *= vital();
 		target.hp -= damage;
 		
 		
@@ -100,6 +103,15 @@ public class Pokemon {
 			return true;
 		}
 		return false;
+	}
+	private double vital()
+	{
+		int n = (int)(Math.random()*1000)%100;
+		if(n<5)
+		{
+			return 2;
+		}
+		return 1;
 	}
 	
 	
