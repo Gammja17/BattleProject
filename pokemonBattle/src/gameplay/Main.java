@@ -42,7 +42,11 @@ public class Main {
 	            	Wild enemy = gm.createWild(num);
 	            	System.out.println("앞으로 나아갑니다.");
 	            	System.out.println("야생의 " + enemy.name + "이(가) 나타났다!");
-	            	battle(player.myPkm, enemy);
+	            	
+	            	battle(player.myPkm, enemy); //대충 배틀 처리하는 메소드
+	            	
+	            	//배틀 승리 시 break
+	            	//배틀 패배 시 gameover
 	            }
 	            if(sc.nextInt()==2) {
 	            	System.out.println(player.myPkm.name+"의 현재 체력은 "+player.myPkm.hp+"입니다.");
